@@ -45,10 +45,11 @@ def get_single_animal(id):
         # instead of the dot notation that JavaScript used.
         if animal["id"] == id:
             requested_animal = animal
-    requested_animal['location'] = get_single_location(requested_animal['locationId'])
-    requested_animal['customer'] = get_single_customer(requested_animal['customerId'])
-    requested_animal.pop('locationId')
-    requested_animal.pop('customerId')
+            requested_animal['location'] = get_single_location(requested_animal['locationId'])
+            requested_animal.pop('locationId')
+            requested_animal['customer'] = get_single_customer(requested_animal['customerId'])
+            requested_animal.pop('customerId')
+        
     return requested_animal
 
 def create_animal(animal):
@@ -65,7 +66,10 @@ def create_animal(animal):
     ANIMALS.append(animal)
 
     # Return the dictionary with `id` property added
+    # if animal is not None:
     return animal
+    # else:
+        # return None
 
 def delete_animal(id):
     # Initial -1 value for animal index, in case one isn't found
