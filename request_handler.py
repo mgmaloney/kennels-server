@@ -62,7 +62,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         """Handles GET requests to the server
         """
         # Set the response code to 'Ok'
-        self._set_headers(200)
         response = {}
 
         # Your new console.log() that outputs to the terminal
@@ -73,7 +72,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "animals":
             if id is not None:
                 response = get_single_animal(id)
-
+                print(response)
+                if response is not None:
+                    self._set_headers(200)
+                else:
+                    response = {"message": "Pet was adopted"}
+                    self._set_headers(404)
             else:
                 response = get_all_animals()
                 
@@ -95,8 +99,13 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = get_single_customer(id)
             else:
                 response = get_all_customers()
-
+        print(response)
+        
+        
+            
+        
         self.wfile.write(json.dumps(response).encode())
+            
 
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
