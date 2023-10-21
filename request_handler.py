@@ -3,6 +3,26 @@ import json
 from views import get_all_animals, get_single_animal, get_single_location, get_all_locations, get_single_employee, get_all_employees, get_all_customers, get_single_customer, create_animal, create_customer, create_employee, create_location, delete_animal, delete_customer, delete_employee, delete_location, update_customer, update_employee, update_animal, update_location
 
 
+method_mapper = {
+    "animals": {
+        "single": get_single_animal,
+        "all": get_all_animals
+    },
+    "customers": {
+        "single": get_single_customer,
+        "all": get_all_customers
+    },
+    "employees": {
+        "single": get_single_employee,
+        "all": get_all_employees
+    },
+    "locations": {
+        "single": get_single_location,
+        "all": get_all_locations
+    }
+    
+}
+
 # Here's a class. It inherits from another class.
 # For now, think of a class as a container for functions that
 # work together for a common purpose. In this case, that
@@ -56,54 +76,64 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept')
         self.end_headers()
 
+    def get_all_or_single(self, resource, id):
+        if id is not None:
+            response = method_mapper[resource]["single"](id)
+
+            if response is not None:
+                self._set_headers(200)
+            else:
+                self._set_headers(404)
+                response = ''
+        else:
+            self._set_headers(200)
+            response = method_mapper[resource]["all"]()
+
+        return response
+    
     # Here's a method on the class that overrides the parent's method.
     # It handles any GET request.
     def do_GET(self):
         """Handles GET requests to the server
         """
-        # Set the response code to 'Ok'
-        response = {}
 
-        # Your new console.log() that outputs to the terminal
-        print(self.path)
-        
+        response = None
         (resource, id) = self.parse_url(self.path)
-
-        if resource == "animals":
-            if id is not None:
-                response = get_single_animal(id)
-                print(response)
-                if response is not None:
-                    self._set_headers(200)
-                else:
-                    response = {"message": "Pet was adopted"}
-                    self._set_headers(404)
-            else:
-                response = get_all_animals()
-                
-        if resource == 'locations':
-            if id is not None:
-                response = get_single_location(id)
-            
-            else:
-                response = get_all_locations()
-                
-        if resource == 'employees':
-            if id is not None:
-                response = get_single_employee(id)
-            else: 
-                response = get_all_employees()
-                
-        if resource == 'customers':
-            if id is not None:
-                response = get_single_customer(id)
-            else:
-                response = get_all_customers()
-        
-        
-            
-        
+        response = self.get_all_or_single(resource, id)
         self.wfile.write(json.dumps(response).encode())
+
+
+        # non-abstracted get method
+        # response = {}
+        # (resource, id) = self.parse_url(self.path)
+        # if resource == "animals":
+        #     if id is not None:
+        #         response = get_single_animal(id)
+        #         print(response)
+        #         if response is not None:
+        #             self._set_headers(200)
+        #         else:
+        #             response = {"message": "Pet was adopted"}
+        #             self._set_headers(404)
+        #     else:
+        #         response = get_all_animals()
+                
+        # if resource == 'locations':
+        #     if id is not None:
+        #         response = get_single_location(id)
+        #     else:
+        #         response = get_all_locations()
+        # if resource == 'employees':
+        #     if id is not None:
+        #         response = get_single_employee(id)
+        #     else: 
+        #         response = get_all_employees()
+        # if resource == 'customers':
+        #     if id is not None:
+        #         response = get_single_customer(id)
+        #     else:
+        #         response = get_all_customers()
+        # self.wfile.write(json.dumps(response).encode())
             
 
     # Here's a method on the class that overrides the parent's method.
