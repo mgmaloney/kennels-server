@@ -63,13 +63,10 @@ def create_animal(animal):
     animal["id"] = new_id
 
     # Add the animal dictionary to the list
-    ANIMALS.append(animal)
-
+    
     # Return the dictionary with `id` property added
-    # if animal is not None:
+    ANIMALS.append(animal)
     return animal
-    # else:
-        # return None
 
 def delete_animal(id):
     # Initial -1 value for animal index, in case one isn't found

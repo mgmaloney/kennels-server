@@ -99,7 +99,6 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = get_single_customer(id)
             else:
                 response = get_all_customers()
-        print(response)
         
         
             
@@ -110,7 +109,7 @@ class HandleRequests(BaseHTTPRequestHandler):
     # Here's a method on the class that overrides the parent's method.
     # It handles any POST request.
     def do_POST(self):
-        self._set_headers(201)
+        
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
 
@@ -130,8 +129,30 @@ class HandleRequests(BaseHTTPRequestHandler):
         # the orange squiggle, you'll define the create_animal
         # function next.
         if resource == "animals":
-            new_animal = create_animal(post_body)
-            self.wfile.write(json.dumps(new_animal).encode())
+            if 'name' not in post_body:
+                self._set_headers(400)
+                response = {"message": "name is required"}
+                self.wfile.write(json.dumps(response).encode())
+            if 'species' not in post_body:
+                self._set_headers(400)
+                response = {"message": "species is required"}
+                self.wfile.write(json.dumps(response).encode())
+            if 'locationId' not in post_body:
+                self._set_headers(400)
+                response = {"message": "locationId is required"}
+                self.wfile.write(json.dumps(response).encode())
+            if 'customerId' not in post_body:
+                self._set_headers(400)
+                response = {"message": "customerId is required"}
+                self.wfile.write(json.dumps(response).encode())
+            if 'status' not in post_body:
+                self._set_headers(400)
+                response = {"message": "status is required"}
+                self.wfile.write(json.dumps(response).encode())
+            else:
+                self._set_headers(400)
+                new_animal = create_animal(post_body)
+                self.wfile.write(json.dumps(new_animal).encode())
             
         if resource == 'locations':
             new_location = create_location(post_body)
