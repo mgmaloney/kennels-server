@@ -1,5 +1,5 @@
 DATABASE = {
-    "ANIMALS": [
+    "animals": [
         {
             "id": 1,
             "name": "Snickers",
@@ -25,19 +25,19 @@ DATABASE = {
             'status': 'admitted'
         }
     ],
-    "EMPLOYEES": [
+    "employees": [
         {
             "id": 1,
             "name": "Jenna Solis"
         }
     ],
-    "CUSTOMERS": [
+    "customers": [
         {
             "id": 1,
             "name": "Ryan Tanay"
         }
     ],
-    "LOCATIONS": [
+    "locations": [
         {
             "id": 1,
             "name": "Nashville North",
