@@ -79,6 +79,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = {"message": "Pet was adopted"}
                     self._set_headers(404)
             else:
+                self._set_headers(200)
                 response = get_all_animals()
                 
         if resource == 'locations':
