@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
-from views import get_all_animals, get_single_animal, get_single_location, get_all_locations, get_single_employee, get_all_employees, get_all_customers, get_single_customer, create_animal, create_customer, create_employee, create_location, delete_animal, delete_customer, delete_employee, delete_location, update_customer, update_employee, update_animal, update_location, get_customer_by_email, get_animals_by_location, get_employees_by_location
+from views import get_all_animals, get_single_animal, get_single_location, get_all_locations, get_single_employee, get_all_employees, get_all_customers, get_single_customer, create_animal, create_customer, create_employee, create_location, delete_animal, delete_customer, delete_employee, delete_location, update_customer, update_employee, update_animal, update_location, get_customer_by_email, get_animals_by_location, get_employees_by_location, get_animals_by_status
 from urllib.parse import urlparse, parse_qs
 
 method_mapper = {
@@ -139,7 +139,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                 self._set_headers(200)
                 response = get_employees_by_location(query['location_id'][0])
                 self.wfile.write(json.dumps(response).encode())
-        
+            if query.get('status') and resource == 'animals':
+                self._set_headers(200)
+                response = get_animals_by_status(query['status'][0])
+                self.wfile.write(json.dumps(response).encode())
+
                 
 
         # non-abstracted get method
