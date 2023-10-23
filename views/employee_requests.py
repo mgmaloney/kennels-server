@@ -79,6 +79,16 @@ def get_employees_by_location(location_id):
         
         return employees
 
+def delete_employee(id):
+    with sqlite3.connect('./kennel.sqlite3') as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        DELETE FROM employee
+        WHERE id = ?                  
+        """, (id,))
+
 # pre sql refactor
 # def get_all_employees():
 #     return EMPLOYEES
@@ -98,15 +108,6 @@ def create_employee(employee):
     employee['id'] = new_id
     EMPLOYEES.append(employee)
     return employee
-
-def delete_employee(id):
-    employee_index = -1
-    for index, employee in enumerate(EMPLOYEES):
-        if employee['id'] == id:
-            employee_index = index
-        
-    if employee_index >= 0:
-        EMPLOYEES.pop(employee_index)
 
 def update_employee(id, new_employee):
     for index, employee in enumerate(EMPLOYEES):
