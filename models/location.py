@@ -4,3 +4,5 @@ class Location():
         self.name = name
         self.id = id
         self.address = address
+        self.employees = None
+        self.animals = None
