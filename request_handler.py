@@ -207,15 +207,15 @@ class HandleRequests(BaseHTTPRequestHandler):
                 self._set_headers(400)
                 response = {"message": "name is required"}
                 self.wfile.write(json.dumps(response).encode())
-            if 'species' not in post_body:
+            if 'breed' not in post_body:
                 self._set_headers(400)
                 response = {"message": "species is required"}
                 self.wfile.write(json.dumps(response).encode())
-            if 'locationId' not in post_body:
+            if 'location_id' not in post_body:
                 self._set_headers(400)
                 response = {"message": "locationId is required"}
                 self.wfile.write(json.dumps(response).encode())
-            if 'customerId' not in post_body:
+            if 'customer_id' not in post_body:
                 self._set_headers(400)
                 response = {"message": "customerId is required"}
                 self.wfile.write(json.dumps(response).encode())
@@ -224,7 +224,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 response = {"message": "status is required"}
                 self.wfile.write(json.dumps(response).encode())
             else:
-                self._set_headers(400)
+                self._set_headers(201)
                 new_animal = create_animal(post_body)
                 self.wfile.write(json.dumps(new_animal).encode())
             
