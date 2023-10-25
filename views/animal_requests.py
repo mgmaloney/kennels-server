@@ -208,9 +208,30 @@ def update_animal(id, new_animal):
             # Forces 204 response by main module
             return True
             
+def create_animal(new_animal):
+    with sqlite3.connect('./kennel.sqlite3') as conn:
+        db_cursor = conn.cursor()
+        
+        db_cursor.execute("""
+        INSERT INTO Animal
+            (name, breed, status, location_id, customer_id)
+        VALUES
+            (?, ?, ?, ?, ?);                  
+        """, (new_animal["name"], new_animal["breed"], new_animal["status"], new_animal["location_id"], new_animal["customer_id"]))
 
-
-
+        # The `lastrowid` property on the cursor will return
+        # the primary key of the last thing that got added to
+        # the database.
+        id = db_cursor.lastrowid
+        
+        # Add the `id` property to the animal dictionary that
+        # was sent by the client so that the client sees the
+        # primary key in the response.
+        new_animal['id'] = id
+    
+    return new_animal
+        
+        
 # pre-sql db code
 # def get_all_animals():
 #     return ANIMALS
@@ -234,21 +255,21 @@ def update_animal(id, new_animal):
         
 #     return requested_animal
 
-def create_animal(animal):
-    # Get the id value of the last animal in the list
-    max_id = ANIMALS[-1]["id"]
+# def create_animal(animal):
+#     # Get the id value of the last animal in the list
+#     max_id = ANIMALS[-1]["id"]
 
-    # Add 1 to whatever that number is
-    new_id = max_id + 1
+#     # Add 1 to whatever that number is
+#     new_id = max_id + 1
 
-    # Add an `id` property to the animal dictionary
-    animal["id"] = new_id
+#     # Add an `id` property to the animal dictionary
+#     animal["id"] = new_id
 
-    # Add the animal dictionary to the list
+#     # Add the animal dictionary to the list
     
-    # Return the dictionary with `id` property added
-    ANIMALS.append(animal)
-    return animal
+#     # Return the dictionary with `id` property added
+#     ANIMALS.append(animal)
+#     return animal
 
 # def delete_animal(id):
 #     # Initial -1 value for animal index, in case one isn't found
